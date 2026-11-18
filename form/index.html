@@ -122,7 +122,18 @@
         }
         .file-name-display { font-size: 0.82rem; font-weight: 700; color: var(--accent); margin-top: 0.35rem; display: none; }
 
-        /* TOMBOL PILIHAN SUMBER IJAZAH (FILE / KAMERA) */
+        /* LIVE CAMERA CONTAINER */
+        .camera-box {
+            background: #0f172a; border-radius: var(--radius-md); overflow: hidden; position: relative;
+            display: none; flex-direction: column; align-items: center; padding: 1rem; gap: 0.75rem;
+        }
+        .camera-box video {
+            width: 100%; max-height: 320px; object-fit: cover; border-radius: 0.5rem; background: #000;
+        }
+        .camera-box canvas { display: none; }
+        .camera-actions { display: flex; gap: 0.75rem; width: 100%; justify-content: center; }
+
+        /* TOMBOL PILIHAN SUMBER (FILE / KAMERA) */
         .ijazah-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.5rem; }
         .btn-source {
             padding: 0.6rem 0.8rem; border-radius: var(--radius-md); font-size: 0.82rem; font-weight: 700;
@@ -179,7 +190,7 @@
     <section class="form-header">
         <div class="container">
             <h1>Formulir Pendaftaran Kerja</h1>
-            <p>Lengkapi informasi data diri, unggah ijazah, dan CV Anda dengan benar.</p>
+            <p>Lengkapi informasi data diri, pasfoto formal berlatar merah, ijazah, dan CV Anda dengan benar.</p>
         </div>
     </section>
 
@@ -217,6 +228,43 @@
                     <div class="form-group">
                         <label>Kota Domisili</label>
                         <input type="text" id="applicantCity" required placeholder="Contoh: Bengkulu / Jakarta" class="form-control">
+                    </div>
+
+                    <!-- UPLOAD PASFOTO FORMAL BACKGROUND MERAH -->
+                    <div class="form-group full-width">
+                        <label>Pasfoto Formal (Background Merah) <span style="color: #ef4444;">*Wajib</span></label>
+                        
+                        <div class="ijazah-actions">
+                            <button type="button" class="btn-source active" id="btnUploadFotoFile" onclick="switchFotoSource('file')">
+                                <i class="fas fa-upload"></i> Unggah File Foto
+                            </button>
+                            <button type="button" class="btn-source" id="btnUseFotoCamera" onclick="switchFotoSource('camera')">
+                                <i class="fas fa-camera"></i> Buka Kamera Langsung
+                            </button>
+                        </div>
+
+                        <!-- TAMPILAN UNGGAH FILE -->
+                        <div class="file-upload-wrapper" id="fotoFileUploadContainer">
+                            <i class="fas fa-user-tie" style="color: #dc2626;"></i>
+                            <p>Pilih file Pasfoto Formal berlatar merah (.jpg, .jpeg, .png)</p>
+                            <span id="fotoFileNameDisplay" class="file-name-display"></span>
+                            <input type="file" id="applicantFotoFile" accept=".jpg,.jpeg,.png">
+                        </div>
+
+                        <!-- TAMPILAN LIVE KAMERA -->
+                        <div class="camera-box" id="fotoCameraContainer">
+                            <video id="cameraPreview" autoplay playsinline></video>
+                            <canvas id="cameraCanvas"></canvas>
+                            <div class="camera-actions">
+                                <button type="button" class="btn-source active" onclick="capturePhoto()" style="background: var(--accent); border-color: var(--accent); color: #fff; flex: 1;">
+                                    <i class="fas fa-circle"></i> Ambil Foto
+                                </button>
+                                <button type="button" class="btn-source" onclick="stopCamera()" style="background: #ef4444; border-color: #ef4444; color: #fff;">
+                                    Tutup
+                                </button>
+                            </div>
+                        </div>
+                        <span id="fotoCameraFileNameDisplay" class="file-name-display" style="text-align: center;"></span>
                     </div>
 
                     <!-- UPLOAD CV (OPSIONAL) -->
@@ -335,6 +383,70 @@
         document.getElementById('displayPositionName').innerText = posisiParam;
         document.getElementById('applicantPosition').value = posisiParam;
 
+        let activeFotoSource = 'file';
+        let mediaStream = null;
+        let capturedFotoBlob = null;
+
+        // FOTO FORMAL SOURCE SWITCHER & LIVE CAMERA STREAM
+        window.switchFotoSource = async function(source) {
+            activeFotoSource = source;
+            const btnFile = document.getElementById('btnUploadFotoFile');
+            const btnCam = document.getElementById('btnUseFotoCamera');
+            const fileCont = document.getElementById('fotoFileUploadContainer');
+            const camCont = document.getElementById('fotoCameraContainer');
+
+            if (source === 'file') {
+                btnFile.classList.add('active');
+                btnCam.classList.remove('active');
+                fileCont.style.display = 'block';
+                camCont.style.display = 'none';
+                stopCamera();
+            } else {
+                btnCam.classList.add('active');
+                btnFile.classList.remove('active');
+                camCont.style.display = 'flex';
+                fileCont.style.display = 'none';
+                document.getElementById('applicantFotoFile').value = '';
+                await startCamera();
+            }
+        };
+
+        async function startCamera() {
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                const videoEl = document.getElementById('cameraPreview');
+                videoEl.srcObject = mediaStream;
+            } catch (err) {
+                alert("Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.");
+                switchFotoSource('file');
+            }
+        }
+
+        window.stopCamera = function() {
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+                mediaStream = null;
+            }
+            document.getElementById('fotoCameraContainer').style.display = 'none';
+        }
+
+        window.capturePhoto = function() {
+            const videoEl = document.getElementById('cameraPreview');
+            const canvasEl = document.getElementById('cameraCanvas');
+            canvasEl.width = videoEl.videoWidth || 640;
+            canvasEl.height = videoEl.videoHeight || 480;
+            const ctx = canvasEl.getContext('2d');
+            ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+
+            canvasEl.toBlob((blob) => {
+                capturedFotoBlob = blob;
+                document.getElementById('fotoCameraFileNameDisplay').innerText = `Pasfoto berhasil diambil dari kamera!`;
+                document.getElementById('fotoCameraFileNameDisplay').style.display = 'block';
+                stopCamera();
+            }, 'image/jpeg', 0.9);
+        }
+
+        // IJAZAH SOURCE SWITCHER
         let activeIjazahSource = 'file';
         window.switchIjazahSource = function(source) {
             activeIjazahSource = source;
@@ -360,6 +472,25 @@
             }
         };
 
+        // FOTO FILE LISTENER
+        const fotoFileInput = document.getElementById('applicantFotoFile');
+        const fotoFileNameDisplay = document.getElementById('fotoFileNameDisplay');
+        fotoFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert("Ukuran pasfoto maksimal 5MB.");
+                    fotoFileInput.value = '';
+                    fotoFileNameDisplay.style.display = 'none';
+                    return;
+                }
+                capturedFotoBlob = null;
+                fotoFileNameDisplay.innerText = `Terpilih: ${file.name}`;
+                fotoFileNameDisplay.style.display = 'block';
+            }
+        });
+
+        // CV LISTENER
         const cvFileInput = document.getElementById('applicantCvFile');
         const cvFileNameDisplay = document.getElementById('cvFileNameDisplay');
         cvFileInput.addEventListener('change', (e) => {
@@ -376,6 +507,7 @@
             }
         });
 
+        // IJAZAH LISTENER
         const ijazahFileInput = document.getElementById('applicantIjazahFile');
         const ijazahFileNameDisplay = document.getElementById('ijazahFileNameDisplay');
         ijazahFileInput.addEventListener('change', (e) => {
@@ -442,21 +574,45 @@
             const socialMedia = document.getElementById('applicantSocial').value.trim();
             const cover = document.getElementById('applicantCover').value.trim();
             
+            const fotoFile = activeFotoSource === 'file' ? fotoFileInput.files[0] : capturedFotoBlob;
             const cvFile = cvFileInput.files[0];
             const ijazahFile = activeIjazahSource === 'file' ? ijazahFileInput.files[0] : cameraFileInput.files[0];
+
+            if (!fotoFile) {
+                alert("Harap unggah atau ambil pasfoto formal berlatar merah terlebih dahulu.");
+                return;
+            }
 
             if (!ijazahFile) {
                 alert("Harap unggah atau ambil foto ijazah terlebih dahulu.");
                 return;
             }
 
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengunggah Berkas...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengunggah Pasfoto...';
             submitBtn.disabled = true;
 
             try {
+                // UPLOAD PASFOTO
+                const fotoFileName = `${Date.now()}_pasfoto_${Math.floor(Math.random()*1000)}.jpg`;
+                const fotoFilePath = `${encodeURIComponent(position)}/${fotoFileName}`;
+
+                const uploadFotoRes = await fetch(`${supabaseUrl}/storage/v1/object/${cvBucket}/${fotoFilePath}`, {
+                    method: 'POST',
+                    headers: {
+                        apikey: supabasePublishableKey,
+                        'Content-Type': 'image/jpeg',
+                        'x-upsert': 'true'
+                    },
+                    body: fotoFile
+                });
+
+                if (!uploadFotoRes.ok) throw new Error('Gagal mengunggah Pasfoto.');
+                const fotoFileUrl = `${supabaseUrl}/storage/v1/object/public/${cvBucket}/${fotoFilePath}`;
+
+                // UPLOAD CV (OPSIONAL)
                 let cvFileUrl = '-';
-                
                 if (cvFile) {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengunggah CV...';
                     const cvExt = cvFile.name.split('.').pop();
                     const cvFileName = `${Date.now()}_cv_${Math.floor(Math.random()*1000)}.${cvExt}`;
                     const cvFilePath = `${encodeURIComponent(position)}/${cvFileName}`;
@@ -476,6 +632,7 @@
                     }
                 }
 
+                // UPLOAD IJAZAH
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengunggah Ijazah...';
                 const ijazahExt = ijazahFile.name ? ijazahFile.name.split('.').pop() : 'jpg';
                 const ijazahFileName = `${Date.now()}_ijazah_${Math.floor(Math.random()*1000)}.${ijazahExt}`;
@@ -502,6 +659,7 @@
                     email: email,
                     domisili: city,
                     posisi: position,
+                    pasfotoUrl: fotoFileUrl,
                     cvUrl: cvFileUrl,
                     ijazahUrl: ijazahFileUrl,
                     sosialMedia: socialMedia || '-',
@@ -521,6 +679,7 @@
                     `📧 *Email:* ${email}\n` +
                     `🏠 *Domisili:* ${city}\n` +
                     `🔗 *Sosmed:* ${socialMedia || '-'}\n` +
+                    `🖼️ *Link Pasfoto (Bg Merah):* ${fotoFileUrl}\n` +
                     `📄 *Link CV:* ${cvFileUrl}\n` +
                     `🎓 *Link Ijazah:* ${ijazahFileUrl}\n\n` +
                     `💬 *Motivasi:* ${cover}`;
@@ -539,18 +698,22 @@
                     isEdited: false
                 });
 
-                showToast("Lamaran kamu telah di kirim", "Mohon tunggu balasan dari admin.");
+                showToast("Lamaran kamu telah dikirim", "Mohon tunggu balasan dari admin.");
                 
                 careerForm.reset();
+                fotoFileNameDisplay.style.display = 'none';
+                document.getElementById('fotoCameraFileNameDisplay').style.display = 'none';
                 cvFileNameDisplay.style.display = 'none';
                 ijazahFileNameDisplay.style.display = 'none';
                 cameraFileNameDisplay.style.display = 'none';
+                capturedFotoBlob = null;
                 document.getElementById('applicantPosition').value = position;
+                switchFotoSource('file');
                 switchIjazahSource('file');
 
             } catch (error) {
                 console.error("Gagal mengirim lamaran:", error);
-                alert("Terjadi kesalahan saat mengirim lamaran. Pastikan bucket 'job-cvs' sudah dibuat di Supabase.");
+                alert("Terjadi kesalahan saat mengirim lamaran. Pastikan bucket 'job-cvs' sudah diset public di Supabase.");
             } finally {
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Lamaran Pekerjaan';
                 submitBtn.disabled = false;
