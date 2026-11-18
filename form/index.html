@@ -122,15 +122,27 @@
         }
         .file-name-display { font-size: 0.82rem; font-weight: 700; color: var(--accent); margin-top: 0.35rem; display: none; }
 
-        /* LIVE CAMERA CONTAINER */
+        /* LIVE CAMERA CONTAINER (KAMERA DEPAN - MIRROR) */
         .camera-box {
             background: #0f172a; border-radius: var(--radius-md); overflow: hidden; position: relative;
             display: none; flex-direction: column; align-items: center; padding: 1rem; gap: 0.75rem;
         }
         .camera-box video {
             width: 100%; max-height: 320px; object-fit: cover; border-radius: 0.5rem; background: #000;
+            transform: scaleX(-1); /* Efek Cermin / Mirror untuk Kamera Depan */
         }
         .camera-box canvas { display: none; }
+
+        /* LIVE CAMERA CONTAINER IJAZAH (KAMERA BELAKANG - NORMAL) */
+        .camera-box-back {
+            background: #0f172a; border-radius: var(--radius-md); overflow: hidden; position: relative;
+            display: none; flex-direction: column; align-items: center; padding: 1rem; gap: 0.75rem;
+        }
+        .camera-box-back video {
+            width: 100%; max-height: 320px; object-fit: cover; border-radius: 0.5rem; background: #000;
+        }
+        .camera-box-back canvas { display: none; }
+
         .camera-actions { display: flex; gap: 0.75rem; width: 100%; justify-content: center; }
 
         /* TOMBOL PILIHAN SUMBER (FILE / KAMERA) */
@@ -230,7 +242,7 @@
                         <input type="text" id="applicantCity" required placeholder="Contoh: Bengkulu / Jakarta" class="form-control">
                     </div>
 
-                    <!-- UPLOAD PASFOTO FORMAL BACKGROUND MERAH -->
+                    <!-- UPLOAD PASFOTO FORMAL BACKGROUND MERAH (KAMERA DEPAN - MIRROR) -->
                     <div class="form-group full-width">
                         <label>Pasfoto Formal (Background Merah) <span style="color: #ef4444;">*Wajib</span></label>
                         
@@ -239,7 +251,7 @@
                                 <i class="fas fa-upload"></i> Unggah File Foto
                             </button>
                             <button type="button" class="btn-source" id="btnUseFotoCamera" onclick="switchFotoSource('camera')">
-                                <i class="fas fa-camera"></i> Buka Kamera Langsung
+                                <i class="fas fa-camera"></i> Kamera Depan (Cermin)
                             </button>
                         </div>
 
@@ -251,7 +263,7 @@
                             <input type="file" id="applicantFotoFile" accept=".jpg,.jpeg,.png">
                         </div>
 
-                        <!-- TAMPILAN LIVE KAMERA -->
+                        <!-- TAMPILAN LIVE KAMERA DEPAN -->
                         <div class="camera-box" id="fotoCameraContainer">
                             <video id="cameraPreview" autoplay playsinline></video>
                             <canvas id="cameraCanvas"></canvas>
@@ -278,32 +290,40 @@
                         </div>
                     </div>
 
-                    <!-- UPLOAD / FOTO IJAZAH (WAJIB) -->
+                    <!-- UPLOAD / FOTO IJAZAH (KAMERA BELAKANG) -->
                     <div class="form-group full-width">
                         <label>Foto Ijazah Pendidikan Terakhir <span style="color: #ef4444;">*Wajib</span></label>
                         
                         <div class="ijazah-actions">
-                            <button type="button" class="btn-source active" id="btnUploadFile" onclick="switchIjazahSource('file')">
+                            <button type="button" class="btn-source active" id="btnUploadIjazahFile" onclick="switchIjazahSource('file')">
                                 <i class="fas fa-upload"></i> Unggah File
                             </button>
-                            <button type="button" class="btn-source" id="btnUseCamera" onclick="switchIjazahSource('camera')">
-                                <i class="fas fa-camera"></i> Foto Kamera
+                            <button type="button" class="btn-source" id="btnUseIjazahCamera" onclick="switchIjazahSource('camera')">
+                                <i class="fas fa-camera"></i> Kamera Belakang
                             </button>
                         </div>
 
-                        <div class="file-upload-wrapper" id="fileUploadContainer">
-                            <i class="fas fa-certificate"></i>
-                            <p>Pilih file Scan Ijazah (.jpg, .png, .pdf)</p>
+                        <div class="file-upload-wrapper" id="ijazahFileUploadContainer">
+                            <img src="https://img.icons8.com/color/96/diploma.png" alt="Logo Ijazah Asli" style="width: 44px; height: 44px; object-fit: contain; margin-bottom: 0.35rem;">
+                            <p>Pilih file Scan Ijazah Asli (.jpg, .png, .pdf)</p>
                             <span id="ijazahFileNameDisplay" class="file-name-display"></span>
                             <input type="file" id="applicantIjazahFile" accept=".jpg,.jpeg,.png,.pdf">
                         </div>
 
-                        <div class="file-upload-wrapper" id="cameraUploadContainer" style="display: none;">
-                            <i class="fas fa-camera-retro"></i>
-                            <p>Ambil foto ijazah langsung dengan kamera HP</p>
-                            <span id="cameraFileNameDisplay" class="file-name-display"></span>
-                            <input type="file" id="applicantCameraFile" accept="image/*" capture="environment">
+                        <!-- TAMPILAN LIVE KAMERA BELAKANG -->
+                        <div class="camera-box-back" id="ijazahCameraContainer">
+                            <video id="cameraBackPreview" autoplay playsinline></video>
+                            <canvas id="cameraBackCanvas"></canvas>
+                            <div class="camera-actions">
+                                <button type="button" class="btn-source active" onclick="captureBackPhoto()" style="background: var(--accent); border-color: var(--accent); color: #fff; flex: 1;">
+                                    <i class="fas fa-circle"></i> Ambil Foto Ijazah
+                                </button>
+                                <button type="button" class="btn-source" onclick="stopBackCamera()" style="background: #ef4444; border-color: #ef4444; color: #fff;">
+                                    Tutup
+                                </button>
+                            </div>
                         </div>
+                        <span id="ijazahCameraFileNameDisplay" class="file-name-display" style="text-align: center;"></span>
                     </div>
 
                     <!-- MEDIA SOSIAL (OPSIONAL) -->
@@ -387,7 +407,7 @@
         let mediaStream = null;
         let capturedFotoBlob = null;
 
-        // FOTO FORMAL SOURCE SWITCHER & LIVE CAMERA STREAM
+        // FOTO FORMAL (KAMERA DEPAN - MIRROR)
         window.switchFotoSource = async function(source) {
             activeFotoSource = source;
             const btnFile = document.getElementById('btnUploadFotoFile');
@@ -407,18 +427,19 @@
                 camCont.style.display = 'flex';
                 fileCont.style.display = 'none';
                 document.getElementById('applicantFotoFile').value = '';
-                await startCamera();
+                await startCamera('user', 'cameraPreview');
             }
         };
 
-        async function startCamera() {
+        async function startCamera(facingMode, videoElementId) {
             try {
-                mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
-                const videoEl = document.getElementById('cameraPreview');
+                mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode }, audio: false });
+                const videoEl = document.getElementById(videoElementId);
                 videoEl.srcObject = mediaStream;
             } catch (err) {
                 alert("Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.");
-                switchFotoSource('file');
+                if (videoElementId === 'cameraPreview') switchFotoSource('file');
+                else switchIjazahSource('file');
             }
         }
 
@@ -436,6 +457,10 @@
             canvasEl.width = videoEl.videoWidth || 640;
             canvasEl.height = videoEl.videoHeight || 480;
             const ctx = canvasEl.getContext('2d');
+            
+            // Terapkan balik efek cermin saat gambar disimpan ke canvas agar tidak terbalik
+            ctx.translate(canvasEl.width, 0);
+            ctx.scale(-1, 1);
             ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
 
             canvasEl.toBlob((blob) => {
@@ -446,31 +471,73 @@
             }, 'image/jpeg', 0.9);
         }
 
-        // IJAZAH SOURCE SWITCHER
+        // IJAZAH (KAMERA BELAKANG)
         let activeIjazahSource = 'file';
-        window.switchIjazahSource = function(source) {
+        let backMediaStream = null;
+        let capturedIjazahBlob = null;
+
+        window.switchIjazahSource = async function(source) {
             activeIjazahSource = source;
-            const btnFile = document.getElementById('btnUploadFile');
-            const btnCam = document.getElementById('btnUseCamera');
-            const fileCont = document.getElementById('fileUploadContainer');
-            const camCont = document.getElementById('cameraUploadContainer');
+            const btnFile = document.getElementById('btnUploadIjazahFile');
+            const btnCam = document.getElementById('btnUseIjazahCamera');
+            const fileCont = document.getElementById('ijazahFileUploadContainer');
+            const camCont = document.getElementById('ijazahCameraContainer');
 
             if (source === 'file') {
                 btnFile.classList.add('active');
                 btnCam.classList.remove('active');
                 fileCont.style.display = 'block';
                 camCont.style.display = 'none';
-                document.getElementById('applicantCameraFile').value = '';
-                document.getElementById('cameraFileNameDisplay').style.display = 'none';
+                stopBackCamera();
             } else {
                 btnCam.classList.add('active');
                 btnFile.classList.remove('active');
-                camCont.style.display = 'block';
+                camCont.style.display = 'flex';
                 fileCont.style.display = 'none';
                 document.getElementById('applicantIjazahFile').value = '';
-                document.getElementById('ijazahFileNameDisplay').style.display = 'none';
+                await startBackCamera();
             }
         };
+
+        async function startBackCamera() {
+            try {
+                backMediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: 'environment' } }, audio: false });
+            } catch (e) {
+                try {
+                    backMediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+                } catch (err) {
+                    alert("Tidak dapat mengakses kamera belakang.");
+                    switchIjazahSource('file');
+                    return;
+                }
+            }
+            const videoEl = document.getElementById('cameraBackPreview');
+            videoEl.srcObject = backMediaStream;
+        }
+
+        window.stopBackCamera = function() {
+            if (backMediaStream) {
+                backMediaStream.getTracks().forEach(track => track.stop());
+                backMediaStream = null;
+            }
+            document.getElementById('ijazahCameraContainer').style.display = 'none';
+        }
+
+        window.captureBackPhoto = function() {
+            const videoEl = document.getElementById('cameraBackPreview');
+            const canvasEl = document.getElementById('cameraBackCanvas');
+            canvasEl.width = videoEl.videoWidth || 1280;
+            canvasEl.height = videoEl.videoHeight || 720;
+            const ctx = canvasEl.getContext('2d');
+            ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+
+            canvasEl.toBlob((blob) => {
+                capturedIjazahBlob = blob;
+                document.getElementById('ijazahCameraFileNameDisplay').innerText = `Foto ijazah berhasil diambil!`;
+                document.getElementById('ijazahCameraFileNameDisplay').style.display = 'block';
+                stopBackCamera();
+            }, 'image/jpeg', 0.95);
+        }
 
         // FOTO FILE LISTENER
         const fotoFileInput = document.getElementById('applicantFotoFile');
@@ -507,7 +574,7 @@
             }
         });
 
-        // IJAZAH LISTENER
+        // IJAZAH FILE LISTENER
         const ijazahFileInput = document.getElementById('applicantIjazahFile');
         const ijazahFileNameDisplay = document.getElementById('ijazahFileNameDisplay');
         ijazahFileInput.addEventListener('change', (e) => {
@@ -519,24 +586,9 @@
                     ijazahFileNameDisplay.style.display = 'none';
                     return;
                 }
+                capturedIjazahBlob = null;
                 ijazahFileNameDisplay.innerText = `Terpilih: ${file.name}`;
                 ijazahFileNameDisplay.style.display = 'block';
-            }
-        });
-
-        const cameraFileInput = document.getElementById('applicantCameraFile');
-        const cameraFileNameDisplay = document.getElementById('cameraFileNameDisplay');
-        cameraFileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                if (file.size > 5 * 1024 * 1024) {
-                    alert("Ukuran foto maksimal 5MB.");
-                    cameraFileInput.value = '';
-                    cameraFileNameDisplay.style.display = 'none';
-                    return;
-                }
-                cameraFileNameDisplay.innerText = `Foto berhasil diambil`;
-                cameraFileNameDisplay.style.display = 'block';
             }
         });
 
@@ -576,7 +628,7 @@
             
             const fotoFile = activeFotoSource === 'file' ? fotoFileInput.files[0] : capturedFotoBlob;
             const cvFile = cvFileInput.files[0];
-            const ijazahFile = activeIjazahSource === 'file' ? ijazahFileInput.files[0] : cameraFileInput.files[0];
+            const ijazahFile = activeIjazahSource === 'file' ? ijazahFileInput.files[0] : capturedIjazahBlob;
 
             if (!fotoFile) {
                 alert("Harap unggah atau ambil pasfoto formal berlatar merah terlebih dahulu.");
@@ -634,15 +686,14 @@
 
                 // UPLOAD IJAZAH
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengunggah Ijazah...';
-                const ijazahExt = ijazahFile.name ? ijazahFile.name.split('.').pop() : 'jpg';
-                const ijazahFileName = `${Date.now()}_ijazah_${Math.floor(Math.random()*1000)}.${ijazahExt}`;
+                const ijazahFileName = `${Date.now()}_ijazah_${Math.floor(Math.random()*1000)}.jpg`;
                 const ijazahFilePath = `${encodeURIComponent(position)}/${ijazahFileName}`;
 
                 const uploadIjazahRes = await fetch(`${supabaseUrl}/storage/v1/object/${cvBucket}/${ijazahFilePath}`, {
                     method: 'POST',
                     headers: {
                         apikey: supabasePublishableKey,
-                        'Content-Type': ijazahFile.type || 'image/jpeg',
+                        'Content-Type': 'image/jpeg',
                         'x-upsert': 'true'
                     },
                     body: ijazahFile
@@ -705,8 +756,9 @@
                 document.getElementById('fotoCameraFileNameDisplay').style.display = 'none';
                 cvFileNameDisplay.style.display = 'none';
                 ijazahFileNameDisplay.style.display = 'none';
-                cameraFileNameDisplay.style.display = 'none';
+                document.getElementById('ijazahCameraFileNameDisplay').style.display = 'none';
                 capturedFotoBlob = null;
+                capturedIjazahBlob = null;
                 document.getElementById('applicantPosition').value = position;
                 switchFotoSource('file');
                 switchIjazahSource('file');
