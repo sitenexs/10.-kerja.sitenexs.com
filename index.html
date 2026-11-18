@@ -57,70 +57,94 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
         button, input, select, textarea { font-family: inherit; outline: none; }
-        .container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 2; }
+        .container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 1.25rem; position: relative; z-index: 2; }
 
         .bg-grid-pattern {
             background-image: linear-gradient(to right, rgba(37, 99, 235, 0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
-            background-size: 32px 32px;
+            background-size: 28px 28px;
         }
 
-        /* NAVBAR */
+        /* NAVBAR RESPONSIF */
         #navbar {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm);
         }
-        .nav-container { display: flex; align-items: center; justify-content: space-between; height: 76px; }
-        .logo { display: flex; align-items: center; gap: 0.6rem; font-weight: 800; font-size: 1.25rem; color: var(--text-main); }
+        .nav-container { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+        .logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 1.15rem; color: var(--text-main); }
         .logo-text { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo-img { height: 38px; width: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: var(--shadow-sm); }
+        .logo-img { height: 34px; width: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: var(--shadow-sm); }
         
-        .nav-links { display: flex; align-items: center; gap: 1.5rem; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+        .nav-links { display: flex; align-items: center; gap: 1.25rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
         .nav-links a:hover { color: var(--primary); }
 
+        /* HAMBURGER MENU TOGGLE UNTUK HP */
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.4rem; color: var(--text-main); cursor: pointer; }
+
         /* HERO SECTION */
-        .hero { text-align: center; padding-top: 150px; padding-bottom: 4rem; }
-        .hero-wrapper { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
-        .badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1.2rem; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; background-color: rgba(37, 99, 235, 0.08); color: var(--primary); border: 1px solid rgba(37, 99, 235, 0.18); margin: 0 auto; }
-        .hero-title { font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; color: var(--text-main); }
-        .hero-desc { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; max-width: 660px; margin: 0 auto; }
+        .hero { text-align: center; padding-top: 130px; padding-bottom: 3.5rem; }
+        .hero-wrapper { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
+        .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 1rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; background-color: rgba(37, 99, 235, 0.08); color: var(--primary); border: 1px solid rgba(37, 99, 235, 0.18); margin: 0 auto; }
+        .hero-title { font-size: clamp(2rem, 7vw, 3.2rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; color: var(--text-main); }
+        .hero-desc { font-size: 0.98rem; color: var(--text-muted); line-height: 1.6; max-width: 620px; margin: 0 auto; }
         
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; font-size: 0.9rem; font-weight: 700; border-radius: var(--radius-full); transition: var(--transition); cursor: pointer; border: 1px solid transparent; text-align: center; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.35rem; font-size: 0.88rem; font-weight: 700; border-radius: var(--radius-full); transition: var(--transition); cursor: pointer; border: 1px solid transparent; text-align: center; width: 100%; max-width: 280px; margin: 0 auto; }
         .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: #ffffff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35); }
-        .btn-outline { background-color: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
-        .btn-outline:hover { background-color: var(--primary-light); transform: translateY(-3px); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35); }
+        .btn-outline { background-color: transparent; color: var(--primary); border: 1.5px solid var(--primary); max-width: unset; width: auto; }
+        .btn-outline:hover { background-color: var(--primary-light); }
 
         /* SECTION STYLING */
-        .page-section { padding: 5rem 0; }
-        .section-header { text-align: center; max-width: 680px; margin: 0 auto 3.5rem auto; }
-        .section-subtitle { display: inline-block; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; color: var(--primary); text-transform: uppercase; margin-bottom: 0.75rem; padding: 0.3rem 1rem; background: rgba(37, 99, 235, 0.08); border-radius: var(--radius-full); border: 1px solid rgba(37, 99, 235, 0.18); }
-        .section-title { font-size: clamp(1.8rem, 2.8vw, 2.4rem); font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); line-height: 1.25; margin-bottom: 0.5rem; }
-        .section-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.6; }
+        .page-section { padding: 4rem 0; }
+        .section-header { text-align: center; max-width: 680px; margin: 0 auto 2.5rem auto; padding: 0 0.5rem; }
+        .section-subtitle { display: inline-block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; color: var(--primary); text-transform: uppercase; margin-bottom: 0.5rem; padding: 0.25rem 0.85rem; background: rgba(37, 99, 235, 0.08); border-radius: var(--radius-full); border: 1px solid rgba(37, 99, 235, 0.18); }
+        .section-title { font-size: clamp(1.6rem, 5vw, 2.4rem); font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); line-height: 1.25; margin-bottom: 0.4rem; }
+        .section-desc { font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* GRIDS & CARDS */
+        .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+        .benefit-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-sm); }
+        .benefit-icon { width: 44px; height: 44px; background: var(--primary-light); color: var(--primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; margin-bottom: 1rem; }
+        .benefit-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--text-main); }
+        .benefit-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; }
 
         /* LOWONGAN KERJA GRID */
-        .jobs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem; }
-        .job-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-sm); transition: var(--transition); display: flex; flex-direction: column; justify-content: space-between; }
-        .job-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-        .job-tag { display: inline-block; font-size: 0.75rem; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 0.25rem 0.75rem; border-radius: var(--radius-full); margin-bottom: 1rem; width: fit-content; }
-        .job-title { font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem; }
-        .job-details { display: flex; gap: 1rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; }
-        .job-details span { display: inline-flex; align-items: center; gap: 0.35rem; }
-        .job-desc { font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem; }
-
-        /* MENGAPA BERGABUNG */
-        .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-        .benefit-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-sm); }
-        .benefit-icon { width: 50px; height: 50px; background: var(--primary-light); color: var(--primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.25rem; }
-        .benefit-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text-main); }
-        .benefit-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+        .jobs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+        .job-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-sm); transition: var(--transition); display: flex; flex-direction: column; justify-content: space-between; }
+        .job-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .job-tag { display: inline-block; font-size: 0.7rem; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 0.2rem 0.65rem; border-radius: var(--radius-full); margin-bottom: 0.85rem; width: fit-content; }
+        .job-title { font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.4rem; }
+        .job-details { display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.85rem; }
+        .job-details span { display: inline-flex; align-items: center; gap: 0.3rem; }
+        .job-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 1.25rem; }
 
         /* FOOTER */
-        .footer { background: #ffffff; border-top: 1px solid var(--border-subtle); padding: 3rem 0; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+        .footer { background: #ffffff; border-top: 1px solid var(--border-subtle); padding: 2.5rem 0; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
 
-        @media (max-width: 900px) {
-            .benefits-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
+        /* MEDIA QUERY KHUSUS HP (Max 768px) */
+        @media (max-width: 768px) {
+            html { font-size: 14px; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: #ffffff;
+                padding: 1.25rem 1.5rem;
+                box-shadow: 0 10px 15px -5px rgba(15, 23, 42, 0.08);
+                border-bottom: 1px solid var(--border-subtle);
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .nav-links.active { display: flex; }
+            .menu-toggle { display: block; }
+            .hero { padding-top: 115px; padding-bottom: 2.5rem; }
+            .page-section { padding: 3rem 0; }
+            .benefits-grid, .jobs-grid { grid-template-columns: 1fr; }
+            .benefit-card[style*="grid-column"] { grid-column: span 1 !important; }
+            .hero-wrapper { padding: 0 0.5rem; }
         }
     </style>
 </head>
@@ -131,14 +155,20 @@
         <div class="container nav-container">
             <a href="https://sitenexs.com" class="logo">
                 <img src="https://sitenexs.com/assets/logo/logo.png" alt="Sitenexs Logo" class="logo-img">
-                <span class="logo-text">SiteNexs <span style="font-size: 0.75rem; background: var(--primary-light); color: var(--primary); padding: 0.15rem 0.5rem; border-radius: var(--radius-full); vertical-align: middle; margin-left: 0.25rem;">Career</span></span>
+                <span class="logo-text">SiteNexs <span style="font-size: 0.7rem; background: var(--primary-light); color: var(--primary); padding: 0.1rem 0.4rem; border-radius: var(--radius-full); vertical-align: middle; margin-left: 0.2rem;">Career</span></span>
             </a>
-            <nav class="nav-links">
-                <a href="#lowongan">Lowongan</a>
-                <a href="#budaya">Suasana Kerja</a>
-                <a href="#alur">Cara Daftar</a>
-                <a href="#ketentuan">Ketentuan</a>
-                <a href="https://sitenexs.com" class="btn btn-outline" style="padding: 0.45rem 1rem; font-size: 0.85rem;">Sitenexs Utama</a>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Buka Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="#lowongan" onclick="closeMenu()">Lowongan</a>
+                <a href="#fasilitas" onclick="closeMenu()">Fasilitas</a>
+                <a href="#budaya" onclick="closeMenu()">Suasana Kerja</a>
+                <a href="#alur" onclick="closeMenu()">Cara Daftar</a>
+                <a href="#ketentuan" onclick="closeMenu()">Ketentuan</a>
+                <a href="https://sitenexs.com" class="btn btn-outline" style="padding: 0.4rem 0.85rem; font-size: 0.8rem; width: 100%; text-align: center;">Sitenexs Utama</a>
             </nav>
         </div>
     </header>
@@ -156,9 +186,9 @@
                 <p class="hero-desc">
                     Di Sitenexs, kami merancang teknologi yang benar-benar ngebantu usaha kecil dan menengah agar naik kelas. Cari posisi yang pas buat kamu dan mari bertumbuh bareng!
                 </p>
-                <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 0.5rem;">
-                    <a href="#lowongan" class="btn btn-primary">
-                        <i class="fas fa-briefcase"></i> Lihat Lowongan yang Ada
+                <div style="display: flex; justify-content: center; width: 100%; margin-top: 0.5rem;">
+                    <a href="#lowongan" class="btn btn-primary" style="max-width: 240px;">
+                        <i class="fas fa-briefcase"></i> Lihat Lowongan
                     </a>
                 </div>
             </div>
@@ -194,8 +224,46 @@
         </div>
     </section>
 
+    <!-- FASILITAS YANG DIDAPAT -->
+    <section id="fasilitas" class="page-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Benefit Karyawan</span>
+                <h2 class="section-title">Fasilitas yang Kamu Dapat</h2>
+                <p class="section-desc">Kami berkomitmen memberikan apresiasi, penghargaan, serta ruang berkembang seluas-luasnya bagi setiap anggota tim.</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-money-bill-wave"></i></div>
+                    <h3 class="benefit-title">Gaji & Bonus Target</h3>
+                    <p class="benefit-desc">Dapatkan gaji pokok serta bonus tambahan menarik jika kamu berhasil mencapai target performa dan kontribusi kerja.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-certificate text-primary"></i></div>
+                    <h3 class="benefit-title">Centang Biru Komunitas</h3>
+                    <p class="benefit-desc">Spesial bagi anggota tim berdedikasi, dapatkan lencana centang biru resmi di dalam platform komunitas Sitenexs.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fas fa-users"></i></div>
+                    <h3 class="benefit-title">Tim Pengembang (Core Team)</h3>
+                    <p class="benefit-desc">Berkesempatan langsung masuk dan diakui ke dalam daftar jajaran tim pengembang inti di balik ekosistem Sitenexs.</p>
+                </div>
+                <div class="benefit-card" style="grid-column: span 3; background: linear-gradient(135deg, var(--primary-light) 0%, #ffffff 100%); border-color: rgba(37, 99, 235, 0.2);">
+                    <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+                        <div class="benefit-icon" style="margin-bottom: 0;"><i class="fas fa-chart-line"></i></div>
+                        <div>
+                            <h3 class="benefit-title">Peluang Kenaikan Jabatan (Promosi)</h3>
+                            <p class="benefit-desc">Pintu karier selalu terbuka lebar! Jika kamu konsisten mencapai target dan menunjukkan dedikasi tinggi, kesempatan untuk naik jabatan dan memimpin divisi terbuka sangat luas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CARA KERJA / ALUR REKRUTMEN -->
-    <section id="alur" class="page-section">
+    <section id="alur" class="page-section" style="background-color: #ffffff;">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Langkah Gampang</span>
@@ -224,7 +292,7 @@
     </section>
 
     <!-- DAFTAR LOWONGAN PEKERJAAN -->
-    <section id="lowongan" class="page-section" style="background-color: #ffffff;">
+    <section id="lowongan" class="page-section">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Peluang Karir</span>
@@ -233,7 +301,7 @@
             </div>
 
             <div class="jobs-grid">
-                <!-- Lowongan 1 -->
+                <!-- Lowongan 1: Sales Manager -->
                 <div class="job-card">
                     <div>
                         <span class="job-tag">Full-Time / Remote</span>
@@ -246,7 +314,25 @@
                             Nge-lead tim buat ngenalin solusi Sitenexs ke pelaku UMKM di berbagai daerah, ngebangun kerja sama seru, dan memperluas jangkauan platform kita.
                         </p>
                     </div>
-                    <a href="form/?posisi=Sales%20Manager" class="btn btn-primary" style="width: 100%;">
+                    <a href="form/?posisi=Sales%20Manager" class="btn btn-primary" style="width: 100%; max-width: unset;">
+                        <i class="fas fa-paper-plane"></i> Daftar Posisi Ini
+                    </a>
+                </div>
+
+                <!-- Lowongan 2: Promoter -->
+                <div class="job-card">
+                    <div>
+                        <span class="job-tag">Part-Time / Freelance / Lapangan</span>
+                        <h3 class="job-title">Promoter Sitenexs</h3>
+                        <div class="job-details">
+                            <span><i class="fas fa-map-marker-alt"></i> Lokal / Area Domisili</span>
+                            <span><i class="fas fa-clock"></i> Fleksibel</span>
+                        </div>
+                        <p class="job-desc">
+                            Bertugas mengenalkan, mempromosikan, dan mengajak pemilik warung, kafe, atau toko lokal di sekitarmu untuk menggunakan sistem kasir & QR ordering Sitenexs.
+                        </p>
+                    </div>
+                    <a href="form/?posisi=Promoter" class="btn btn-primary" style="width: 100%; max-width: unset;">
                         <i class="fas fa-paper-plane"></i> Daftar Posisi Ini
                     </a>
                 </div>
@@ -255,29 +341,29 @@
     </section>
 
     <!-- SYARAT DAN KETENTUAN -->
-    <section id="ketentuan" class="page-section">
+    <section id="ketentuan" class="page-section" style="background-color: #ffffff;">
         <div class="container" style="max-width: 800px;">
-            <div class="section-header" style="margin-bottom: 2.5rem;">
+            <div class="section-header" style="margin-bottom: 2rem;">
                 <span class="section-subtitle">Catatan Penting</span>
                 <h2 class="section-title">Syarat & Ketentuan Melamar</h2>
                 <p class="section-desc">Supaya prosesnya lancar buat kita semua, yuk baca ketentuan santai berikut:</p>
             </div>
 
-            <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 1.5rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;">
-                <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                    <i class="fas fa-check-circle text-primary" style="margin-top: 0.3rem; font-size: 1.1rem; color: var(--primary);"></i>
+            <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 1.25rem; color: var(--text-muted); font-size: 0.9rem; line-height: 1.65;">
+                <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+                    <i class="fas fa-check-circle text-primary" style="margin-top: 0.25rem; font-size: 1.05rem; color: var(--primary);"></i>
                     <p><strong>Data Jujur & Asli:</strong> Pastikan CV, portofolio, dan data diri yang kamu isi benar apa adanya tanpa ada yang direkayasa ya.</p>
                 </div>
-                <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                    <i class="fas fa-check-circle text-primary" style="margin-top: 0.3rem; font-size: 1.1rem; color: var(--primary);"></i>
+                <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+                    <i class="fas fa-check-circle text-primary" style="margin-top: 0.25rem; font-size: 1.05rem; color: var(--primary);"></i>
                     <p><strong>Siap Alat Kerja & Internet:</strong> Buat kamu yang ambil posisi <em>Remote</em>, pastikan kamu punya laptop/PC yang oke serta koneksi internet yang stabil buat kelancaran kerjaan sehari-hari.</p>
                 </div>
-                <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                    <i class="fas fa-check-circle text-primary" style="margin-top: 0.3rem; font-size: 1.1rem; color: var(--primary);"></i>
+                <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+                    <i class="fas fa-check-circle text-primary" style="margin-top: 0.25rem; font-size: 1.05rem; color: var(--primary);"></i>
                     <p><strong>Data Kamu Aman:</strong> Kami bakal jaga kerahasiaan data pribadi kamu dengan aman dan cuma dipakai khusus untuk keperluan rekrutmen di Sitenexs saja.</p>
                 </div>
-                <div style="display: flex; gap: 1rem; align-items: flex-start;">
-                    <i class="fas fa-check-circle text-primary" style="margin-top: 0.3rem; font-size: 1.1rem; color: var(--primary);"></i>
+                <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+                    <i class="fas fa-check-circle text-primary" style="margin-top: 0.25rem; font-size: 1.05rem; color: var(--primary);"></i>
                     <p><strong>100% Gratis Tanpa Biaya:</strong> Seluruh rangkaian tes dan seleksi di Sitenexs itu <strong>gratis alias tidak dipungut biaya sepeser pun</strong>. Hati-hati ya sama penipuan yang mengatasnamakan Sitenexs!</p>
                 </div>
             </div>
@@ -290,6 +376,31 @@
             &copy; 2026 Sitenexs Solusi Digital. All rights reserved.
         </div>
     </footer>
+
+    <!-- SCRIPT UNTUK MENU HP (HAMBURGER) -->
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        function closeMenu() {
+            navLinks.classList.remove('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    </script>
 
 </body>
 </html>
