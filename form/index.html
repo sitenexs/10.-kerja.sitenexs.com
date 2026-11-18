@@ -101,14 +101,6 @@
         }
         .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); background-color: #ffffff; }
 
-        /* KOTAK POSISI TERKUNCI */
-        .position-badge-box {
-            background: var(--primary-light); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: var(--radius-md);
-            padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between;
-        }
-        .position-badge-box span { font-weight: 800; color: var(--primary); font-size: 1rem; }
-        .position-badge-box i { color: var(--primary); font-size: 1rem; }
-
         /* UPLOAD FILE WRAPPER */
         .file-upload-wrapper {
             border: 2px dashed var(--border-medium); border-radius: var(--radius-md); padding: 1.25rem; text-align: center;
@@ -212,14 +204,10 @@
             <form id="careerForm">
                 <div class="form-grid">
                     
-                    <!-- POSISI (TERKUNCI) -->
+                    <!-- POSISI YANG DILAMAR (DIKETIK MANUAL) -->
                     <div class="form-group full-width">
-                        <label>Posisi yang Dilamar</label>
-                        <div class="position-badge-box">
-                            <span id="displayPositionName">Memuat Posisi...</span>
-                            <i class="fas fa-check-circle" title="Posisi Terpilih"></i>
-                        </div>
-                        <input type="hidden" id="applicantPosition" value="">
+                        <label>Posisi yang Dilamar <span style="color: #ef4444;">*Wajib</span></label>
+                        <input type="text" id="applicantPosition" required placeholder="Contoh: Sales Manager / Promoter / Web Developer" class="form-control" style="font-weight: 700; color: var(--primary);">
                     </div>
 
                     <div class="form-group">
@@ -397,11 +385,12 @@
             }
         });
 
+        // Tangkap parameter URL jika ada (misal dari tombol daftar di halaman utama), tapi tetap bisa diedit manual
         const urlParams = new URLSearchParams(window.location.search);
-        const posisiParam = urlParams.get('posisi') || 'Sales Manager';
-
-        document.getElementById('displayPositionName').innerText = posisiParam;
-        document.getElementById('applicantPosition').value = posisiParam;
+        const posisiParam = urlParams.get('posisi');
+        if (posisiParam) {
+            document.getElementById('applicantPosition').value = posisiParam;
+        }
 
         let activeFotoSource = 'file';
         let mediaStream = null;
@@ -622,13 +611,18 @@
             const phone = document.getElementById('applicantPhone').value.trim();
             const email = document.getElementById('applicantEmail').value.trim();
             const city = document.getElementById('applicantCity').value.trim();
-            const position = document.getElementById('applicantPosition').value;
+            const position = document.getElementById('applicantPosition').value.trim();
             const socialMedia = document.getElementById('applicantSocial').value.trim();
             const cover = document.getElementById('applicantCover').value.trim();
             
             const fotoFile = activeFotoSource === 'file' ? fotoFileInput.files[0] : capturedFotoBlob;
             const cvFile = cvFileInput.files[0];
             const ijazahFile = activeIjazahSource === 'file' ? ijazahFileInput.files[0] : capturedIjazahBlob;
+
+            if (!position) {
+                alert("Harap isi posisi yang ingin dilamar terlebih dahulu.");
+                return;
+            }
 
             if (!fotoFile) {
                 alert("Harap unggah atau ambil pasfoto formal berlatar merah terlebih dahulu.");
@@ -759,7 +753,6 @@
                 document.getElementById('ijazahCameraFileNameDisplay').style.display = 'none';
                 capturedFotoBlob = null;
                 capturedIjazahBlob = null;
-                document.getElementById('applicantPosition').value = position;
                 switchFotoSource('file');
                 switchIjazahSource('file');
 
